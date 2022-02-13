@@ -1,20 +1,19 @@
 const { prompt} = require("inquirer");
-const db = require("./db");
 require('console.table');
-const connection = require('./db/connection')
 const mysql = require('mysql2')
 
 const connection = mysql.createConnection(
   {
       host: 'localhost',
       user: 'root',
-      password: '',
+      password: 'SQLstrongPassw0rd',
       database: 'CMS_db'
   }
 )
 
 console.table(
-  "\n------------ Welcome to the Employee Management System (EMS ------------\n"
+  console.log("\n------------ Welcome to the Employee Management System (EMS) ------------\n"),
+  MainPrompts()
 )
 
 //Main Menu
@@ -94,7 +93,7 @@ function MainPrompts() {
 //view all employees
 const viewEmployees = () => {
   connection.promise().query(
-      "SELECT employee.id AS 'ID', employee.first_name AS 'First Name', employee.last_name AS 'Last Name', role.title AS 'Title', department.name AS 'Department', role.salary as Salary, CONCAT(manager.first_name, ' ', manager.last_name) AS 'Manager' from employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN employee manager on manager.id = employee.manager_id LEFT JOIN department ON role.department_id = department.id;"
+      "SELECT employee.id AS 'ID', employee.first_name AS 'First Name', employee.last_name AS 'Last Name', role.role_title AS 'Title', department.department_name AS 'Department', role.role_salary as Salary, CONCAT(manager.first_name, ' ', manager.last_name) AS 'Manager' from employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN employee manager on manager.id = employee.manager_id LEFT JOIN department ON role.department_id = department.id;"
   ).then(([response]) => {
       console.log("\n")
       console.table(response)
@@ -104,9 +103,9 @@ const viewEmployees = () => {
 
 //add a new employee
 const addEmployee = () => {
-  connection.promise().query("SELECT role.title, role.id FROM role;")
+  connection.promise().query("SELECT role.role_title, role.id FROM role;")
       .then(([res]) => {
-          inquirer.prompt([
+          prompt([
               {
                   type: 'input',
                   name: 'first_name',
@@ -121,7 +120,7 @@ const addEmployee = () => {
                   type: 'list',
                   name: 'role',
                   message: "What is the new employee's role?",
-                  choices: res.map(({ title, id }) => ({ name: title, value: id }))
+                  choices: res.map(({ role_title, id }) => ({ name: role_title, value: id }))
               }
 
           ]).then((res) => {
@@ -131,7 +130,7 @@ const addEmployee = () => {
 
               connection.promise().query("SELECT employee.first_name, employee.last_name, employee.id FROM employee WHERE manager_id IS NULL;")
                   .then(([res]) => {
-                      inquirer.prompt([
+                      prompt([
                           {
                               type: 'list',
                               name: 'manager',
@@ -166,7 +165,7 @@ const viewDepartments = () => {
 
 //add a department
 const addDepartment = () => {
-  inquirer.prompt([
+  prompt([
       {
           type: 'input',
           name: 'name',
@@ -175,7 +174,7 @@ const addDepartment = () => {
   ]).then((res) => {
       const newDepartment = res.name
       connection.promise().query(
-          "INSERT INTO department (name) VALUES(?)", newDepartment
+          "INSERT INTO department (department_name) VALUES(?)", newDepartment
       ).then(() => {
           console.log('\n', '\n', `Your department update has been made!`, '\n', '\n')
       }).then(() => MainPrompts())
@@ -186,7 +185,7 @@ const addDepartment = () => {
 const updateEmployee = () => {
   connection.promise().query("SELECT * from employee")
       .then(([res]) => {
-          inquirer.prompt([
+          prompt([
               {
                   type: 'list',
                   name: 'employee',
@@ -195,14 +194,14 @@ const updateEmployee = () => {
               }
           ]).then((res) => {
               const updatedEmployee = res.employee
-              connection.promise().query("SELECT role.id, role.title FROM role")
+              connection.promise().query("SELECT role.id, role.role_title FROM role")
               .then(([res]) => {
-                  inquirer.prompt([
+                  prompt([
                       {
                           type: 'list',
                           name: 'viewRoles',
-                          message: 'What would you like their new role to be?',
-                          choices: res.map(({title, id}) => ({name: title, value: id}))
+                          message: 'What is their new role?',
+                          choices: res.map(({role_title, id}) => ({name: role_title, value: id}))
                       }
                   ]).then((res) => {
                       connection.promise().query("UPDATE employee SET role_id = ? WHERE id = ?", [res.viewRoles, updatedEmployee]
@@ -218,7 +217,7 @@ const updateEmployee = () => {
 //view all roles
 const viewRoles = () => {
   connection.promise().query(
-      "SELECT role.id, role.role_title, role.role_salary, department.name AS department FROM role JOIN department on role.department_id = department.id;"
+      "SELECT role.id, role.role_title, role.role_salary, department.department_name AS department FROM role JOIN department on role.department_id = department.id;"
   ).then(([response]) => {
       console.log("\n")
       console.table(response)
@@ -228,9 +227,9 @@ const viewRoles = () => {
 
 //add a role
 const addRole = () => {
-  connection.promise().query("SELECT department.name, department.id FROM department;"
+  connection.promise().query("SELECT department.department_name, department.id FROM department;"
   ).then(([res]) => {
-      inquirer.prompt([
+      prompt([
           {
               type: 'input',
               name: 'title',
