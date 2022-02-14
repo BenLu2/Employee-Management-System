@@ -4,7 +4,7 @@ VALUES ("Sales"),
        ("Finance"),
        ("Legal"),
 
-INSERT INTO position (department_id, role_title, role_salary)
+INSERT INTO role (department_id, role_title, role_salary)
 VALUES (1, "Sales Lead", 100000),
        (1, "Salesperson", 80000),
        (2, "Lead Engineer", 150000),

@@ -74,7 +74,7 @@ function MainPrompts() {
     case "ADD_EMPLOYEE":
     addEmployee();
     break;
-    case "ADD_Role":
+    case "ADD_ROLE":
     addRole();
     break;
     case "ADD_DEPT":
@@ -227,7 +227,8 @@ const viewRoles = () => {
 
 //add a role
 const addRole = () => {
-  connection.promise().query("SELECT department.department_name, department.id FROM department;"
+  connection.promise().query(
+    "SELECT * FROM department"
   ).then(([res]) => {
       prompt([
           {
@@ -244,7 +245,7 @@ const addRole = () => {
               type: 'list',
               name: 'department',
               message: 'What department is the role assigned to?',
-              choices: res.map(({ name, id }) => ({ name: name, value: id }))
+              choices: res.map(({ department_name, id }) => ({ name: department_name, value: id }))
           }
       ]).then((res) => {
           const newRole = [`${res.title}`, `${res.salary}`, `${res.department}`]
