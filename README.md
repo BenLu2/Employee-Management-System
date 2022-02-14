@@ -3,10 +3,10 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This Employee Management System project is designed for company to track their employee's role, salary and managers. 
-You can add employee by adding their first name, last name, role title, salary and manager name.
-You can also add new role and department to the database.
-For any role changes, you can update the employee to different department and roles.
+This Employee Management System project is designed for company to track their employee's role, salary and managers. </br>
+You can add employee by adding their first name, last name, role title, salary and manager name. </br>
+You can also add new role and department to the database. </br>
+For any role changes, you can update the employee to different department and roles. </br>
 
 
 
