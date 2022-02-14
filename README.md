@@ -26,9 +26,6 @@ Before start, please install the inquirer and mysql2 by using the following npm 
 
   ```
   npm install inquirer
-  ```
-  
-    ```
   npm install mysql2
   ```
 
@@ -44,8 +41,8 @@ Once the inquirer and mysql2 is installed, run `node index.js` to start the appl
 <!-- CONTACT -->
 ## Contact
 
-Yudong Lu - 
+Yudong Lu - Linkedin: https://www.linkedin.com/in/yudong-lu/
 
-Project Link: 
+Project Link: https://github.com/BenLu2/Employee-Management-System
 
 <p align="right">(<a href="#top">back to top</a>)</p>
